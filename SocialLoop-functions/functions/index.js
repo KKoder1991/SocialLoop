@@ -21,10 +21,8 @@ firebase.initializeApp(config);
 
 const db = admin.firestore();
 
-
 app.get("/loopers", (req, res) => {
-  db
-    .firestore()
+  db.firestore()
     .collection("looper")
     .orderBy("createdAt", "desc")
     .get()
@@ -50,8 +48,7 @@ app.post("/looper", (req, res) => {
     createdAt: new Date().toISOString(),
   };
 
-  db
-    .firestore()
+  db.firestore()
     .collection("looper")
     .add(newLooper)
     .then((doc) => {
@@ -73,17 +70,27 @@ app.post("/signup", (req, res) => {
     looperHandle: req.body.looperHandle,
   };
 
-    // Authentication TODO validate data
-
-
-
-    firebase
-    .auth()
-    .createUserWithEmailAndPassword(newUser.email, newUser.password)
+  // Authentication TODO validate data
+  db.doc(`/users/${newUser.looperHandle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        return res
+          .status(400)
+          .json({ looperHandle: "this handle is already taken" });
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(newUser.email, newUser.password);
+      }
+    })
     .then((data) => {
       return res
-        .status(201) //means resource has been created
-        .json({ message: `User ${data.user.uid} signed up successfully` });
+        .status(201)
+        .json({ message: `user ${data.user.uid} signed up succesfully` });
+    })
+    .then((token) => {
+      return res, status(201).json({ token });
     })
     .catch((err) => {
       console.error(err);
