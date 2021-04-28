@@ -19,9 +19,11 @@ const config = {
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
+const db = admin.firestore();
+
 
 app.get("/loopers", (req, res) => {
-  admin
+  db
     .firestore()
     .collection("looper")
     .orderBy("createdAt", "desc")
@@ -48,7 +50,7 @@ app.post("/looper", (req, res) => {
     createdAt: new Date().toISOString(),
   };
 
-  admin
+  db
     .firestore()
     .collection("looper")
     .add(newLooper)
@@ -72,6 +74,8 @@ app.post("/signup", (req, res) => {
   };
 
     // Authentication TODO validate data
+
+
 
     firebase
     .auth()
