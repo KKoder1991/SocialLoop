@@ -6,9 +6,6 @@ admin.initializeApp();
 const express = require("express");
 const app = express();
 
-const firebase = require("firebase");
-firebase.initializeApp(config);
-
 const config = {
   apiKey: "AIzaSyB5WXSnL6-JTz4kQf6JQmF_5eqWC925AkA",
   authDomain: "socialloop-9e25d.firebaseapp.com",
@@ -18,6 +15,10 @@ const config = {
   appId: "1:36370948602:web:9cdd704d46e26c24568443",
   measurementId: "G-C5JY1L3067",
 };
+
+const firebase = require("firebase");
+firebase.initializeApp(config);
+
 
 app.get("/loopers", (req, res) => {
   admin
@@ -67,7 +68,7 @@ app.post("/signup", (req, res) => {
     email: req.body.email,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
-    handle: req.body.handle,
+    looperHandle: req.body.looperHandle,
   };
 
     // Authentication TODO validate data
