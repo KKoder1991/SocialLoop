@@ -85,9 +85,7 @@ app.post("/signup", (req, res) => {
       }
     })
     .then((data) => {
-      return res
-        .status(201)
-        .json({ message: `user ${data.user.uid} signed up succesfully` });
+      return data.user.getIdToken();
     })
     .then((token) => {
       return res.status(201).json({ token });
