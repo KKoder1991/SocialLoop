@@ -6,6 +6,19 @@ admin.initializeApp();
 const express = require('express');
 const app = express();
 
+const firebase = require('firebase');
+firebase.initializeApp(config);
+
+const config =  {
+        apiKey: "AIzaSyB5WXSnL6-JTz4kQf6JQmF_5eqWC925AkA",
+        authDomain: "socialloop-9e25d.firebaseapp.com",
+        projectId: "socialloop-9e25d",
+        storageBucket: "socialloop-9e25d.appspot.com",
+        messagingSenderId: "36370948602",
+        appId: "1:36370948602:web:9cdd704d46e26c24568443",
+        measurementId: "G-C5JY1L3067"
+      };
+
 app.get('/loopers', (req, res) => {
     admin
     .firestore()
