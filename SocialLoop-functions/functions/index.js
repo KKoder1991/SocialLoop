@@ -70,9 +70,9 @@ app.post("/signup", (req, res) => {
     handle: req.body.handle,
   };
 
-  // Authentication TODO validate data
+    // Authentication TODO validate data
 
-  firebase
+    firebase
     .auth()
     .createUserWithEmailAndPassword(newUser.email, newUser.password)
     .then((data) => {
