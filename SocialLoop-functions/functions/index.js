@@ -6,29 +6,32 @@ admin.initializeApp();
 const express = require('express');
 const app = express();
 
-exports.getLoopers = functions.https.onRequest((req, res) => {
+app.get('/loopers', (req, res) => {
     admin
     .firestore()
     .collection('looper')
+    .orderBy('createdAt', 'desc')
     .get()
     .then((data) => {
         let loopers = [];
         data.forEach((doc) => {
-            loopers.push(doc.data());
+            loopers.push({
+                looperId: doc.id,
+                body: doc.data().body,
+                looperHandle: doc.data().looperHandle,
+                createdAt: doc.data().createdAt
+            });
         });
         return res.json(loopers);
     })
     .catch((err) => console.error(err));
 });
 
-exports.createLooper = functions.https.onRequest((req, res) => {
-    if (req.method !== 'POST') {
-        return res.status(400).json({ error: 'Method not allowed' });
-    }
+app.post('/looper', (req, res) => {
     const newLooper = {
         body: req.body.body,
         looperHandle: req.body.looperHandle,
-        createdAt: admin.firestore.Timestamp.fromDate(new Date())
+        createdAt: new Date().toISOString()
     };
 
     admin
@@ -43,3 +46,5 @@ exports.createLooper = functions.https.onRequest((req, res) => {
             console.error(err);
         });
 });
+
+exports.api = functions.region("europe-west1").https.onRequest(app);
