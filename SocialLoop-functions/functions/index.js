@@ -73,7 +73,7 @@ app.post("/signup", (req, res) => {
   // Authentication TODO validate data
   db.doc(`/users/${newUser.looperHandle}`)
     .get()
-    .then((doc) => {
+    .then(doc => {
       if (doc.exists) {
         return res
           .status(400)
@@ -84,15 +84,15 @@ app.post("/signup", (req, res) => {
           .createUserWithEmailAndPassword(newUser.email, newUser.password);
       }
     })
-    .then((data) => {
+    .then(data => {
       return res
         .status(201)
         .json({ message: `user ${data.user.uid} signed up succesfully` });
     })
-    .then((token) => {
+    .then(token => {
       return res, status(201).json({ token });
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(err);
       return res.status(500).json({ error: err.code }); // Returns server error if there is a problem
     });
